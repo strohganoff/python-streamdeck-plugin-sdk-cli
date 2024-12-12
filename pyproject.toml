@@ -7,7 +7,7 @@
 
 [project]
     name = "streamdeck-plugin-sdk-cli"
-    version = "0.1.0"
+    dynamic = ["version"]
     description = "CLI util to create the scaffolding of a Stream Deck plugin, validate it, and pack it to be ready for install."
     readme = "README.md"
     authors = [
@@ -78,7 +78,7 @@
 
     [project.urls]
         "Homepage" = "https://github.com/strohganoff/python-streamdeck-plugin-sdk-cli"
-        "Source" = "https://github.com/strohganoff/python-streamdeck-plugin-sdk-cli"
+        "Repository" = "https://github.com/strohganoff/python-streamdeck-plugin-sdk-cli"
         "Documentation" = "https://docs.elgato.com/streamdeck/sdk/introduction/getting-started/"
         "Issues" = "https://github.com/strohganoff/python-streamdeck-plugin-sdk-cli/issues"
 
@@ -87,6 +87,9 @@
 
 [tool.setuptools.packages.find]
     include = ["streamdeck_cli*"]
+
+[tool.setuptools.dynamic]
+    version  = {attr = "streamdeck_cli.utils._version.MODULE_VERSION"}
 
 
 # Add type annotations to your Python programs, and use mypy to type check them.
