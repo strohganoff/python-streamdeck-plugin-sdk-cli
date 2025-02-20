@@ -51,6 +51,16 @@ If a release was already saved to directory '0.0.1-1', then a new release direct
 #### Next Step
 Simply double-click the .streamDeckPlugin file, which will load up the plugin in the Stream Deck application.
 
+#### Pack for debug mode
+To pack the plugin in debug mode, which enables remote debugging capabilities, use the `--debug` flag:
+
+```bash
+streamdeck-cli pack /path/to/plugin --debug --debug-port 5679
+```
+
+This will create a flag file named `.debug` in the packed plugin containing the specified port.
+
+When this file is included, the plugin will wait for a debugger to attach at that port before starting. You can use tools like VS Code's Python debugger or PyCharm's remote debugger to connect to it.
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request on GitHub.

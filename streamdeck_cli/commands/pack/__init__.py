@@ -1,6 +1,4 @@
 """Pack/build a Stream Deck plugin into a .streamDeckPlugin file."""
-from __future__ import annotations
-
 import logging
 from pathlib import Path
 from typing import Optional
@@ -35,6 +33,12 @@ def pack(
         help="Output directory",
     ),
     version: Optional[str] = None,  # noqa: UP007
+    debug_port: Optional[int] = typer.Option(
+        None,
+        "--debug",
+        "-d",
+        help="Enable debug mode in the packed plugin to listen for debug messages on the specified port",
+    ),
 ) -> None:
     """Pack/build a Stream Deck plugin into a .streamDeckPlugin file."""
     # Validate the manifest by initiating its model.
@@ -49,7 +53,7 @@ def pack(
     # Define the full output file path for the plugin.
     # The output file at this path will be a .streamDeckPlugin file, which will open the plugin in the Stream Deck app.
     # The output file at this path is a zip file containing the files of the plugin, which the Stream Deck software unzips to a specific app directory.
-    output_filepath = output_dirpath / f"{manifest.uuid}.streamDeckPlugin"
+    output_filepath = versioned_output_dirpath / f"{manifest.uuid}.streamDeckPlugin"
     logger.info("Output plugin file will be created at: %s", output_filepath)
 
     # Create the package directory
@@ -59,7 +63,13 @@ def pack(
     pathignore_spec: pathspec.PathSpec = get_packignore_specification(plugin_dirpath)
 
     # Create the zip file and add the plugin files
-    archive_plugin_files(plugin_dirpath, output_filepath, plugin_uuid=manifest.uuid, packignore_spec=pathignore_spec)
+    archive_plugin_files(
+        plugin_dirpath,
+        output_filepath,
+        plugin_uuid=manifest.uuid,
+        packignore_spec=pathignore_spec,
+        debug_port=debug_port,
+    )
 
 
 if __name__ == "__main__":
