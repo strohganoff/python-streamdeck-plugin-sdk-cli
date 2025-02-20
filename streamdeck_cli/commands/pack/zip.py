@@ -19,7 +19,13 @@ if TYPE_CHECKING:
 logger = logging.getLogger("streamdeck-cli")
 
 
-def archive_plugin_files(plugin_dirpath: Path, output_filepath: Path, plugin_uuid: str, packignore_spec: pathspec.PathSpec) -> None:
+def archive_plugin_files(
+    plugin_dirpath: Path,
+    output_filepath: Path,
+    plugin_uuid: str,
+    packignore_spec: pathspec.PathSpec,
+    debug_port: int | None = None,
+) -> None:
     """Archive the plugin files into a a new zip file."""
     with zipfile.ZipFile(output_filepath, "w", zipfile.ZIP_DEFLATED) as zip_file:
         # Files should be stuffed in the zip file under a base directory with the name of the plugin UUID found in the manifest.
@@ -35,6 +41,12 @@ def archive_plugin_files(plugin_dirpath: Path, output_filepath: Path, plugin_uui
             logger.debug("%s,  %s", full_filepath, arcname)
 
             zip_file.write(full_filepath, arcname=arcname)
+
+
+        # Add a file `.debug` containing the debug port number if debug mode is enabled to the zip file
+        if debug_port:
+            print("YOOO")
+            zip_file.writestr(f"{entry_prefix}/.debug", str(debug_port))
 
 
 def walk_filtered_plugin_files(source_dirpath: Path, packignore_spec: pathspec.PathSpec) -> Generator[Path, None, None]:
